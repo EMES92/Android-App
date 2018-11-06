@@ -30,7 +30,8 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
     private TelegramLoginButton loginButton;
-    Button button;
+    Button button1;
+    Button button2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +40,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void addListenerOnButton() {
 
-        button = (Button) findViewById(R.id.btn1);
+        button1 = (Button) findViewById(R.id.btn1);
+        button2 = (Button) findViewById(R.id.btn2);
 
-        button.setOnClickListener(new OnClickListener() {
+        button1.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
@@ -50,6 +52,34 @@ public class MainActivity extends AppCompatActivity {
                 String apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
                 String chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
                 String text = "time";
+                urlString = String.format(urlString, apiToken, chatId, text);
+                AsyncHttpClient client = new AsyncHttpClient();
+                RequestParams params = new RequestParams();
+                params.put("key", "value");
+                params.put("more", "data");
+                client.get(urlString, params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                    }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                    }
+                });
+            }
+
+        });
+
+        button2.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                String urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
+                String apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
+                String chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
+                String text = "meteo";
                 urlString = String.format(urlString, apiToken, chatId, text);
                 AsyncHttpClient client = new AsyncHttpClient();
                 RequestParams params = new RequestParams();

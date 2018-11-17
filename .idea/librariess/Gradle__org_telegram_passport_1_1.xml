@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.telegram:passport-1.1">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/passport-1.1.aar/0a5386df8ad0c32740635e07d2ddff85/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/passport-1.1.aar/0a5386df8ad0c32740635e07d2ddff85/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.telegram/passport/1.1/b910c61f65f0f7c15a1279a0259f53e0504e9c0e/passport-1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

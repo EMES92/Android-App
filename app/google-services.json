@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "369313149064",
+    "firebase_url": "https://mobileapplication-222115.firebaseio.com",
+    "project_id": "mobileapplication-222115",
+    "storage_bucket": "mobileapplication-222115.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369313149064:android:0903ba66db6ee4e8",
+        "android_client_info": {
+          "package_name": "com.example.valerio.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "369313149064-kqp3rmt3ojsic709l0894gncs31r8hbm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.valerio.myapplication",
+            "certificate_hash": "e5bff306838397bbd6a001957502204ba093d8a5"
+          }
+        },
+        {
+          "client_id": "369313149064-q8m96tk4qjq8n3v55h5552mded9nru4d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNfYIn7oSgNaaWyKW9SV48PTqyvMW4wmI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "369313149064-q8m96tk4qjq8n3v55h5552mded9nru4d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

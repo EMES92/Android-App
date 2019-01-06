@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+        <EditText
+            android:id="@+id/Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:gravity="top"
+            android:hint="enter_label"
+            android:inputType="textCapWords"
+            android:maxLines="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:scrollbars="vertical"
+            android:singleLine="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:textColorHint="#000"
+            android:textSize="25dp" />
+
+        <EditText
+            android:id="@+id/Address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="25dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textColorHint="#000"
+            android:hint="enter_address"
+            android:inputType="textCapWords"
+            android:singleLine="true"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:maxLines="1"
+            android:scrollbars="vertical" />
+        <EditText
+            android:id="@+id/City"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="25dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textColorHint="#000"
+            android:hint="enter_city"
+            android:inputType="textCapWords"
+            android:singleLine="true"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:maxLines="1"
+            android:scrollbars="vertical" />
+
+
+</LinearLayout>

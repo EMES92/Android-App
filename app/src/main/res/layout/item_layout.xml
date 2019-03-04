@@ -7,6 +7,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/itemEntry"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:padding="4dp"

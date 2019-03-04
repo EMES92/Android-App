@@ -1,5 +1,6 @@
 package com.example.valerio.myapplication;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,16 +15,20 @@ import android.widget.ToggleButton;
 
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class MySensorsAdapter extends RecyclerView.Adapter<MySensorsAdapter.MyViewHolder> {
 
     private List<Integer> sensors;
-    private String[] sensorName = new String[]{"sensorTime", "sensorMeteo", "sensorServo", "sensorTemp", "sensorNoise", "sensorLight", "sensorSisma"};
+    private String[] sensorName = new String[]{"sensorServo", "sensorTemp", "sensorNoise", "sensorLight", "sensorSisma"};
     private ItemClickListener clickListener;
+    private Context context;
 
 
     // constructor
-    public MySensorsAdapter(List<Integer> sensors){
+    public MySensorsAdapter(List<Integer> sensors, Context context){
         this.sensors = sensors;
+        this.context = context;
     }
 
 
@@ -36,6 +41,11 @@ public class MySensorsAdapter extends RecyclerView.Adapter<MySensorsAdapter.MyVi
                 .inflate(R.layout.item_sensor_layout2, null);
 
         MyViewHolder vh = new MyViewHolder(itemLayoutView);
+        String theme = context.getSharedPreferences(MainActivity.getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(HomeFragment.THEME_SAVED, HomeFragment.LIGHTTHEME);
+        if (theme.equals(HomeFragment.DARKTHEME)) {
+            itemLayoutView.setBackgroundColor(0xFF000F00);
+            itemLayoutView.findViewById(R.id.itemSensorEntry).setBackgroundColor(0xFF00FFF0);
+        }
         return vh;
     }
 
@@ -47,22 +57,19 @@ public class MySensorsAdapter extends RecyclerView.Adapter<MySensorsAdapter.MyVi
 
         switch (i){
             case 0:
-                holder.toggleButton.setVisibility(View.VISIBLE);
+                holder.seek1.setVisibility(View.VISIBLE);
                 return;
             case 1:
-                holder.switch1.setVisibility(View.VISIBLE);
+                holder.toggleButton.setVisibility(View.VISIBLE);
                 return;
             case 2:
                 holder.toggleButton.setVisibility(View.VISIBLE);
                 return;
             case 3:
-                holder.switch1.setVisibility(View.VISIBLE);
+                holder.toggleButton.setVisibility(View.VISIBLE);
                 return;
             case 4:
                 holder.toggleButton.setVisibility(View.VISIBLE);
-                return;
-            case 5:
-                holder.switch1.setVisibility(View.VISIBLE);
                 return;
         }
 
@@ -93,7 +100,7 @@ public class MySensorsAdapter extends RecyclerView.Adapter<MySensorsAdapter.MyVi
         public TextView sensorName;
         public Button sensorButton;
         public ToggleButton toggleButton;
-        public SeekBar switch1;
+        public SeekBar seek1;
 
         public MyViewHolder(View itemLayoutView) {
             super(itemLayoutView);
@@ -101,7 +108,7 @@ public class MySensorsAdapter extends RecyclerView.Adapter<MySensorsAdapter.MyVi
             sensorButton = itemLayoutView.findViewById(R.id.btn0);
 
             toggleButton = itemLayoutView.findViewById(R.id.toggle_button);
-            switch1 = itemLayoutView.findViewById(R.id.seekBar);
+            seek1 = itemLayoutView.findViewById(R.id.seekBar);
 
             itemLayoutView.setOnClickListener(this);
         }

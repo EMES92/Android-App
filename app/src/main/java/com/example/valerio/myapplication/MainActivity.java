@@ -3,18 +3,14 @@ package com.example.valerio.myapplication;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,15 +47,31 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInAccount acct;
     private static String accountMail;
 
-    List<String> addedHouse = new ArrayList<>();
+    //static List<String> addedHouse = new ArrayList<>();
+    static List<House> addedHouse1 = new ArrayList<>();
 
     public static String getAccountMail(){
         return accountMail;
     }
+//    public static List<String> getAddedHouse(){
+//        return addedHouse;
+//    }
+    public static List<House> getAddedHouse1(){
+        return addedHouse1;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String theme = getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(HomeFragment.THEME_SAVED, HomeFragment.LIGHTTHEME);
+        Log.w("colore","theme mainactivity1 "+theme);
+        if (theme.equals(HomeFragment.LIGHTTHEME)) {
+            setTheme(R.style.CustomStyle_LightTheme);
+        } else {
+            Log.w("colore","entro else");
+            setTheme(R.style.CustomStyle_DarkTheme);
+        }
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         // Initializing Toolbar and setting it as the actionbar
@@ -83,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Selezionare i sensori da gestire:");
                 // add a checkbox list
-                String[] sensors = {"sensorTime", "sensorMeteo", "sensorServo", "sensorTemp", "sensorNoise", "sensorLight", "sensorSisma"};
-                final boolean[] checkedItems = {false, false, false, false, false, false, false};
+                String[] sensors = {"sensorServo", "sensorTemp", "sensorNoise", "sensorLight", "sensorSisma"};
+                final boolean[] checkedItems = {false, false, false, false, false};
 
                 builder.setMultiChoiceItems(sensors, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
@@ -132,17 +144,20 @@ public class MainActivity extends AppCompatActivity {
                                     House house = new House(label, address, city,
                                             checkedItems[0], checkedItems[1],
                                             checkedItems[2], checkedItems[3],
-                                            checkedItems[4], checkedItems[5],
-                                            checkedItems[6]
+                                            checkedItems[4]
                                     );
 
                                     Menu menu = navigationView.getMenu();
 
-                                    menu.add(0, addedHouse.size() + 1001, 0, house.getName());
-
-
-                                    addedHouse.add(house.getName());
-
+                                    String name = house.getName();
+                                    char[] ascii = name.toCharArray();
+                                    int tot = 0;
+                                    for(char ch:ascii){
+                                        tot = tot+((int)ch);
+                                    }
+                                    menu.add(0, tot, 0, house.getName());
+                                    //addedHouse.add(house.getName());
+                                    addedHouse1.add(house);
                                     homefragment.addItemList(house);
                                 }
                             }
@@ -164,8 +179,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Initializing NavigationView
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
-
-
 
         View hView =  navigationView.getHeaderView(0);
         ImageView nav_user = (ImageView) hView.findViewById(R.id.profile_image);
@@ -211,7 +224,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
         navigationView.setNavigationItemSelectedListener
                 (new NavigationView.OnNavigationItemSelectedListener() {
@@ -219,7 +231,6 @@ public class MainActivity extends AppCompatActivity {
                     // This method will trigger on item Click of navigation menu
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-
 
                         //Checking if the item is in checked state or not, if not make it in checked state
                         if(menuItem.isChecked()) menuItem.setChecked(false);
@@ -231,27 +242,9 @@ public class MainActivity extends AppCompatActivity {
                         //Check to see which item was being clicked and perform appropriate action
                         switch (menuItem.getItemId()){
 
-                            case R.id.home:
-                                HomeFragment homefragment = new HomeFragment();
-                                android.support.v4.app.FragmentTransaction homeFragmentTransaction
-                                        = getSupportFragmentManager().beginTransaction();
-                                homeFragmentTransaction.replace(R.id.frame,homefragment);
-                                homeFragmentTransaction.commit();
-                                return true;
                             case R.id.action_settings:
-//                                Fragment_Settings settingsfragment = new Fragment_Settings();
-//                                android.support.v4.app.FragmentTransaction settingsFragmentTransaction
-//                                        = getSupportFragmentManager().beginTransaction();
-//                                settingsFragmentTransaction.replace(R.id.frame,settingsfragment);
-//                                settingsFragmentTransaction.commit();
-//                                return true;
-//                                getFragmentManager().beginTransaction()
-//                                        .replace(android.R.id.content, new Fragment_Settings()).addToBackStack(null)
-//                                        .commit();
-                                //return true;
                                 Intent settings = new Intent(MainActivity.this, MyPreferenceActivity.class);
                                 startActivity(settings);
-                                //LoginManager.getInstance().logOut();
                                 return true;
 
                             case R.id.action_logOut:
@@ -277,14 +270,30 @@ public class MainActivity extends AppCompatActivity {
 //                                for(int i = 0; i<addedHouse.size(); i++){
 //                                    if(menuItem.getItem() = addedHouse.get(i))
 //                                }
-                                if(!addedHouse.isEmpty()){
-                                    for(int i =0; i<addedHouse.size(); i++)
-                                        if(addedHouse.get(i).equals(menuItem.getItemId())) {
+                                if(!addedHouse1.isEmpty()){
+                                    Log.w("tag","cazzo");
+                                    for(int i =0; i<addedHouse1.size(); i++){
+                                        String name = addedHouse1.get(i).getName();
+                                        char[] ascii = name.toCharArray();
+                                        int tot = 0;
+                                        for(char ch:ascii)
+                                            tot = tot+((int)ch);
+                                        if(tot == menuItem.getItemId()) {
                                             Intent intent = new Intent(MainActivity.this, ControlHouseActivity.class);
+                                            intent.putExtra("address", addedHouse1.get(i).getAddress());
+                                            intent.putExtra("name", addedHouse1.get(i).getName());
+                                            intent.putExtra("city", addedHouse1.get(i).getCity());
+                                            intent.putExtra("sensorServo", addedHouse1.get(i).getSensorServo());
+                                            intent.putExtra("sensorTemp", addedHouse1.get(i).getSensorTemp());
+                                            intent.putExtra("sensorNoise", addedHouse1.get(i).getSensorNoise());
+                                            intent.putExtra("sensorLight", addedHouse1.get(i).getSensorLight());
+                                            intent.putExtra("sensorSisma", addedHouse1.get(i).getSensorSisma());
                                             startActivity(intent);
                                             return true;
                                         }
+                                    }
                                 }
+                                Log.w("tag","return");
                              return false;
                         }
                     }
@@ -316,6 +325,7 @@ public class MainActivity extends AppCompatActivity {
         //calling sync state is necessay or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
 
+
     }
 
     @Override
@@ -327,23 +337,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-//            getFragmentManager().beginTransaction()
-//                    .replace(android.R.id.content, new Fragment_Settings()).addToBackStack(null)
-//                    .commit();
-//            return true;
-//            Fragment_Settings settingsfragment = new Fragment_Settings();
-//            android.support.v4.app.FragmentTransaction settingsFragmentTransaction
-//                    = getSupportFragmentManager().beginTransaction();
-//            settingsFragmentTransaction.replace(R.id.frame,settingsfragment);
-//            settingsFragmentTransaction.commit();
-//            return true;
+            Intent settings = new Intent(MainActivity.this, MyPreferenceActivity.class);
+            startActivity(settings);
         }
         else if (id == R.id.action_logOut) {
             if (acct == null) {
@@ -380,5 +378,31 @@ public class MainActivity extends AppCompatActivity {
         parameters.putString("fields", "id, first_name, last_name, email, gender, birthday, location");
         request.setParameters(parameters);
         request.executeAsync();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        /*
+        We need to do this, as this activity's onCreate won't be called when coming back from SettingsActivity,
+        thus our changes to dark/light mode won't take place, as the setContentView() is not called again.
+        So, inside our SettingsFragment, whenever the checkbox's value is changed, in our shared preferences,
+        we mark our recreate_activity key as true.
+
+        Note: the recreate_key's value is changed to false before calling recreate(), or we woudl have ended up in an infinite loop,
+        as onResume() will be called on recreation, which will again call recreate() and so on....
+        and get an ANR
+
+         */
+        Log.w("colore","theme main activitu resume ");
+
+        if (getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getBoolean(HomeFragment.RECREATE_ACTIVITY, false)) {
+            SharedPreferences.Editor editor = getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).edit();
+            editor.putBoolean(HomeFragment.RECREATE_ACTIVITY, false);
+            editor.apply();
+            recreate();
+        }
+
+
     }
 }

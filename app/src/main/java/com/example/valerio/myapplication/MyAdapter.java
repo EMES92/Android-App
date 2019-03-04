@@ -1,33 +1,39 @@
 package com.example.valerio.myapplication;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     private List<House> addedHouse;
     private ItemClickListener clickListener;
+    private Context context;
 
 
     // constructor
-    public MyAdapter(List<House> addedHouse){
-
-
+    public MyAdapter(List<House> addedHouse, Context context){
         this.addedHouse = addedHouse;
+        this.context = context;
     }
 
     public void removeItem(int position) {
         addedHouse.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, addedHouse.size());
+    }
+    public House getItem(int position){
+        return addedHouse.get(position);
     }
 
     @NonNull
@@ -39,6 +45,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 .inflate(R.layout.item_layout, null);
 
         MyViewHolder vh = new MyViewHolder(itemLayoutView);
+
+        String theme = context.getSharedPreferences(MainActivity.getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(HomeFragment.THEME_SAVED, HomeFragment.LIGHTTHEME);
+        Log.w("colore","theme my adapter "+theme);
+
+        if (theme.equals(HomeFragment.DARKTHEME)) {
+            itemLayoutView.setBackgroundColor(0xFF000F00 );
+            itemLayoutView.findViewById(R.id.itemEntry).setBackgroundColor(0xFF00FF00);
+        }
         return vh;
     }
 

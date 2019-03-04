@@ -40,18 +40,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/CustomStyle.LightTheme" />
+            android:name=".MainActivity"/>
 
-        <activity android:name=".ControlHouseActivity"
-            android:theme="@style/CustomStyle.LightTheme">
+        <activity android:name=".ControlHouseActivity">
 
         </activity>
 
         <activity
             android:name=".MyPreferenceActivity"
-            android:label="Preferences"
-            android:theme="@style/CustomStyle.LightTheme">
+            android:label="Preferences">
 
         </activity>
     </application>

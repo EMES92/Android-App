@@ -1,28 +1,32 @@
 package com.example.valerio.myapplication;
 
-import android.app.ActionBar;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.util.Log;
 
 
-public class MyPreferenceActivity extends PreferenceActivity
+public class MyPreferenceActivity extends AppCompatActivity
 {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        String theme = getSharedPreferences(MainActivity.getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(HomeFragment.THEME_SAVED, HomeFragment.LIGHTTHEME);
+        Log.w("colore","theme preference activitu "+theme);
+
+        if (theme.equals(HomeFragment.LIGHTTHEME)) {
+            setTheme(R.style.CustomStyle_LightTheme);
+        } else {
+            setTheme(R.style.CustomStyle_DarkTheme);
+        }
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_mypreference);
 
-        LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
-        Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.tool_bar, root, false);
-        bar.setTitle("Settings");
-        root.addView(bar, 0); // insert at top
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new Fragment_Settings()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.mycontent, new Fragment_Settings()).commit();
 
     }
 }

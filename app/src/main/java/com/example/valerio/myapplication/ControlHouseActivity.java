@@ -2,12 +2,10 @@ package com.example.valerio.myapplication;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Handler;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,10 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,13 +30,12 @@ import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
+
+import static com.example.valerio.myapplication.MainActivity.getAccountMail;
 
 public class ControlHouseActivity extends AppCompatActivity implements ItemClickListener{
 
@@ -51,26 +44,13 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
     private String address;
     private String city;
 
-
-    private boolean sensorTime;
-    private boolean sensorMeteo ;
     private boolean sensorServo;
     private boolean sensorTemp;
     private boolean sensorNoise;
     private boolean sensorLight;
     private boolean sensorSisma;
-    //private boolean sensor8;
 
     private boolean[] sensors;
-
-    private Button buttonTime;
-    private Button buttonMeteo;
-    private Button buttonServo;
-    private Button buttonTemp;
-    private Button buttonNoise;
-    private Button buttonLight;
-    private Button buttonSisma;
-    //private Button button8;
 
 
     Typeface weatherFont;
@@ -96,6 +76,16 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        String theme = getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(HomeFragment.THEME_SAVED, HomeFragment.LIGHTTHEME);
+        Log.w("colore","theme controlhouse "+theme);
+
+        if (theme.equals(HomeFragment.LIGHTTHEME)) {
+            setTheme(R.style.CustomStyle_LightTheme);
+        } else {
+            setTheme(R.style.CustomStyle_DarkTheme);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control_house);
         // Initializing Toolbar and setting it as the actionbar
@@ -114,15 +104,13 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
         name = getIntent().getStringExtra("name");
         address = getIntent().getStringExtra("address");
         city = getIntent().getStringExtra("city");
-        sensorTime = getIntent().getBooleanExtra("sensorTime", false);
-        sensorMeteo = getIntent().getBooleanExtra("sensorMeteo", false);
         sensorServo = getIntent().getBooleanExtra("sensorServo", false);
         sensorTemp = getIntent().getBooleanExtra("sensorTemp", false);
         sensorNoise = getIntent().getBooleanExtra("sensorNoise", false);
         sensorLight = getIntent().getBooleanExtra("sensorLight", false);
         sensorSisma = getIntent().getBooleanExtra("sensorSisma", false);
 
-        sensors = new boolean[]{sensorTime, sensorMeteo, sensorServo, sensorTemp, sensorNoise, sensorLight, sensorSisma};
+        sensors = new boolean[]{sensorServo, sensorTemp, sensorNoise, sensorLight, sensorSisma};
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -131,7 +119,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
         recyclerView.setLayoutManager(layoutManager);
 
         // adapter
-        adapter = new MySensorsAdapter(sensorsL);
+        adapter = new MySensorsAdapter(sensorsL, getApplicationContext());
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(this);
 
@@ -160,7 +148,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                 urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
                 apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
                 chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
-                text = "time";
+                text = "servo";
                 urlString = String.format(urlString, apiToken, chatId, text);
                 client = new AsyncHttpClient();
                 params = new RequestParams();
@@ -181,48 +169,6 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                 urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
                 apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
                 chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
-                text = "meteo";
-                urlString = String.format(urlString, apiToken, chatId, text);
-                client = new AsyncHttpClient();
-                params = new RequestParams();
-                params.put("key", "value");
-                params.put("more", "data");
-                client.get(urlString, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                    }
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                    }
-                });
-                return;
-            case 2:
-                urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
-                apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
-                chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
-                text = "servo";
-                urlString = String.format(urlString, apiToken, chatId, text);
-                client = new AsyncHttpClient();
-                params = new RequestParams();
-                params.put("key", "value");
-                params.put("more", "data");
-                client.get(urlString, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                    }
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                    }
-                });
-                return;
-            case 3:
-                urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
-                apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
-                chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
                 text = "temperatura";
                 urlString = String.format(urlString, apiToken, chatId, text);
                 client = new AsyncHttpClient();
@@ -240,7 +186,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                     }
                 });
                 return;
-            case 4:
+            case 2:
                 //                String urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
 //                String apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
 //                String chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
@@ -260,7 +206,6 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
 //
 //                    }
 //                });
-
 
                 final Dialog m = new Dialog(ControlHouseActivity.this);
                 m.setContentView(R.layout.graphic_dialog);
@@ -290,7 +235,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
 
                 m.show();
                 return;
-            case 5:
+            case 3:
                 urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
                 apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
                 chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
@@ -311,7 +256,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                     }
                 });
                 return;
-            case 6:
+            case 4:
                 urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
                 apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
                 chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
@@ -333,6 +278,27 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                 });
                 return;
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        /*
+        We need to do this, as this activity's onCreate won't be called when coming back from SettingsActivity,
+        thus our changes to dark/light mode won't take place, as the setContentView() is not called again.
+        So, inside our SettingsFragment, whenever the checkbox's value is changed, in our shared preferences,
+        we mark our recreate_activity key as true.
+
+        Note: the recreate_key's value is changed to false before calling recreate(), or we woudl have ended up in an infinite loop,
+        as onResume() will be called on recreation, which will again call recreate() and so on....
+        and get an ANR
+
+         */
+        if (getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getBoolean(HomeFragment.RECREATE_ACTIVITY, false)) {
+            SharedPreferences.Editor editor = getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).edit();
+            editor.putBoolean(HomeFragment.RECREATE_ACTIVITY, false);
+            editor.apply();
+            recreate();
+        }
 
 
     }
@@ -347,7 +313,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation_drawer, menu);
+        getMenuInflater().inflate(R.menu.nav_drawer_onlysett, menu);
         return true;
     }
 
@@ -360,30 +326,10 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-//            getFragmentManager().beginTransaction()
-//                    .replace(android.R.id.content, new Fragment_Settings()).addToBackStack(null)
-//                    .commit();
-//            return true;
-            //
-//            Fragment_Settings settingsfragment = new Fragment_Settings();
-//            android.support.v4.app.FragmentTransaction settingsFragmentTransaction
-//                    = getSupportFragmentManager().beginTransaction();
-//            settingsFragmentTransaction.replace(R.id.frame,settingsfragment);
-//            settingsFragmentTransaction.commit();
-//            return true;
+            Intent settings = new Intent(ControlHouseActivity.this, MyPreferenceActivity.class);
+            startActivity(settings);
+            return true;
         }
-//        else if (id == R.id.action_logOut) {
-//            if (acct == null) {
-//                Intent turnLoginPage = new Intent(MainActivity.this, Login.class);
-//                startActivity(turnLoginPage);
-//                LoginManager.getInstance().logOut();
-//            } else {
-//                Intent turnLoginPage = new Intent(MainActivity.this, Login.class);
-//                turnLoginPage.putExtra("logout", 1);
-//                startActivity(turnLoginPage);
-//            }
-//            finish();
-//        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,13 +23,11 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements ItemClickListener{
 
-//    private int mTheme = -1;
-//    private String theme = "name_of_the_theme";
-//    public static final String THEME_PREFERENCES = "com.avjindersekhon.themepref";
-//    public static final String RECREATE_ACTIVITY = "com.avjindersekhon.recreateactivity";
-//    public static final String THEME_SAVED = "com.avjindersekhon.savedtheme";
-//    public static final String DARKTHEME = "com.avjindersekon.darktheme";
-//    public static final String LIGHTTHEME = "com.avjindersekon.lighttheme";
+    public static final String THEME_PREFERENCES = "com.avjindersekhon.themepref";
+    public static final String RECREATE_ACTIVITY = "com.avjindersekhon.recreateactivity";
+    public static final String THEME_SAVED = "com.avjindersekhon.savedtheme";
+    public static final String DARKTHEME = "com.avjindersekon.darktheme";
+    public static final String LIGHTTHEME = "com.avjindersekon.lighttheme";
 
     private RecyclerView recyclerView;
     private StoreRetrieveData storeRetrieveData;
@@ -42,16 +39,6 @@ public class HomeFragment extends Fragment implements ItemClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-//        theme = getActivity().getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE).getString(THEME_SAVED, LIGHTTHEME);
-//
-//       // if (theme.equals(LIGHTTHEME)) {
-//            mTheme = R.style.CustomStyle_LightTheme;
-//        //} else {
-//           // mTheme = R.style.CustomStyle_DarkTheme;
-//        //}
-//        this.getActivity().setTheme(mTheme);
-
 
         View v = inflater.inflate(
                 R.layout.fragment_home, container, false);
@@ -69,20 +56,17 @@ public class HomeFragment extends Fragment implements ItemClickListener{
 
         storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
         getLocallyStoredData(storeRetrieveData);
-        adapter = new MyAdapter(addedHouse);
+        adapter = new MyAdapter(addedHouse, getContext());
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(this);
 
         enableSwipe();
         return v;
-
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     //generate a list of Link
@@ -92,7 +76,13 @@ public class HomeFragment extends Fragment implements ItemClickListener{
             addedHouse = storeRetrieveData.loadFromFile();
             if(addedHouse != null){
                 for(int i = 0; i<addedHouse.size(); i++){
-                    navigationView.getMenu().add(0, addedHouse.size() + 1001, 0, addedHouse.get(i).getName());
+                    MainActivity.getAddedHouse1().add(addedHouse.get(i));
+                    char[] ascii = addedHouse.get(i).getName().toCharArray();
+                    int tot = 0;
+                    for(char ch:ascii){
+                        tot = tot+((int)ch);
+                    }
+                    navigationView.getMenu().add(0, tot, 0, addedHouse.get(i).getName());
                     //navigationView.getMenu().getItem(addedHouse.size()).getActionView().setTag(addedHouse.get(i).getName());
                 }
             }
@@ -146,8 +136,6 @@ public class HomeFragment extends Fragment implements ItemClickListener{
         i.putExtra("address", house.getAddress());
         i.putExtra("name", house.getName());
         i.putExtra("city", house.getCity());
-        i.putExtra("sensorTime", house.getSensorTime());
-        i.putExtra("sensorMeteo", house.getSensorMeteo());
         i.putExtra("sensorServo", house.getSensorServo());
         i.putExtra("sensorTemp", house.getSensorTemp());
         i.putExtra("sensorNoise", house.getSensorNoise());
@@ -170,9 +158,16 @@ public class HomeFragment extends Fragment implements ItemClickListener{
                 int position = viewHolder.getAdapterPosition();
 //                    final Model deletedModel = addedHouse.get(position);
 //                    final int deletedPosition = position;
-                adapter.removeItem(0);
+                String name = adapter.getItem(position).getName();
+                char[] ascii = name.toCharArray();
+                int tot = 0;
+                for(char ch:ascii){
+                    tot = tot+((int)ch);
+                }
+                adapter.removeItem(position);
 
-                navigationView.getMenu().removeItem(1003);
+                MainActivity.getAddedHouse1().remove(position);
+                navigationView.getMenu().removeItem(tot);
 
                 // showing snack bar with Undo option
 //                    Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), " removed from Recyclerview!", Snackbar.LENGTH_LONG);

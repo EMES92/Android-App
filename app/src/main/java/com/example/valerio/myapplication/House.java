@@ -11,9 +11,7 @@ public class House {
     private String name;
     private String address;
     private String city;
-    
-    private boolean sensorTime;
-    private boolean sensorMeteo;
+
     private boolean sensorServo;
     private boolean sensorTemp;
     private boolean sensorNoise;
@@ -26,8 +24,6 @@ public class House {
     private static final String HOUSEADDRESS = "houseaddress";
     private static final String HOUSECITY = "housecity";
 
-    private static final String HOUSESENSORTIME = "housesensortime";
-    private static final String HOUSESENSORMETEO = "housesensormeteo";
     private static final String HOUSESENSORSERVO = "housesensorservo";
     private static final String HOUSESENSORTEMP = "housesensortemp";
     private static final String HOUSESENSORNOISE = "housesensornoise";
@@ -37,12 +33,10 @@ public class House {
 
 
 
-    public House(String name, String address, String city, boolean sensorTime, boolean sensorMeteo, boolean sensorServo, boolean sensorTemp, boolean sensorNoise, boolean sensorLight, boolean sensorSisma ){
+    public House(String name, String address, String city, boolean sensorServo, boolean sensorTemp, boolean sensorNoise, boolean sensorLight, boolean sensorSisma ){
         this.name=name;
         this.address=address;
         this.city=city;
-        this.sensorTime=sensorTime;
-        this.sensorMeteo=sensorMeteo;
         this.sensorServo=sensorServo;
         this.sensorTemp=sensorTemp;
         this.sensorNoise=sensorNoise;
@@ -54,8 +48,6 @@ public class House {
         name = jsonObject.getString(HOUSENAME);
         address = jsonObject.getString(HOUSEADDRESS);
         city = jsonObject.getString(HOUSECITY);
-        sensorTime = jsonObject.getBoolean(HOUSESENSORTIME);
-        sensorMeteo = jsonObject.getBoolean(HOUSESENSORMETEO);
         sensorServo = jsonObject.getBoolean(HOUSESENSORSERVO);
         sensorTemp = jsonObject.getBoolean(HOUSESENSORTEMP);
         sensorNoise = jsonObject.getBoolean(HOUSESENSORNOISE);
@@ -76,12 +68,6 @@ public class House {
     }
 
 
-    public boolean getSensorTime(){
-        return sensorTime;
-    }
-    public boolean getSensorMeteo(){
-        return sensorMeteo;
-    }
     public boolean getSensorServo(){
         return sensorServo;
     }
@@ -98,7 +84,7 @@ public class House {
         return sensorSisma;
     }
     public boolean[] getSensors(){
-        boolean[] sensors={sensorTime, sensorMeteo, sensorServo, sensorTemp, sensorNoise, sensorLight, sensorSisma};
+        boolean[] sensors={ sensorServo, sensorTemp, sensorNoise, sensorLight, sensorSisma};
         return sensors;
     }
 
@@ -117,8 +103,6 @@ public class House {
         jsonObject.put(HOUSENAME, name);
         jsonObject.put(HOUSEADDRESS, address);
         jsonObject.put(HOUSECITY, city);
-        jsonObject.put(HOUSESENSORTIME, sensorTime);
-        jsonObject.put(HOUSESENSORMETEO, sensorMeteo);
         jsonObject.put(HOUSESENSORSERVO, sensorServo);
         jsonObject.put(HOUSESENSORTEMP, sensorTemp);
         jsonObject.put(HOUSESENSORNOISE, sensorNoise);

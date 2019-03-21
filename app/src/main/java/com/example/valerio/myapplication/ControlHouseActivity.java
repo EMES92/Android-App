@@ -137,145 +137,262 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
     public void onClick(View v, int position){
         //boolean sensor = sensorsMap.get(position);
         int i = sensorsL.get(position);
-        String urlString;
-        String apiToken;
-        String chatId;
+        String urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
+        String apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
+        String chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
         String text;
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         switch (i){
             case 0:
-                urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
-                apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
-                chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
-                text = "servo";
-                urlString = String.format(urlString, apiToken, chatId, text);
-                client = new AsyncHttpClient();
-                params = new RequestParams();
-                params.put("key", "value");
-                params.put("more", "data");
-                client.get(urlString, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if(v.getId() == R.id.btn0) {
+                    final Dialog m = new Dialog(ControlHouseActivity.this);
+                    m.setContentView(R.layout.graphic_dialog);
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    int heightPix = metrics.heightPixels;
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
 
-                    }
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    int width = (size.x / (int) metrics.density) * 5 / 10;
+                    int height = (size.y / (int) metrics.density) * 5 / 10;
+                    String widthS = String.valueOf(width);
+                    String heightS = String.valueOf(height);
 
-                    }
-                });
+                    String html = "<iframe width=" + widthS + " height=" + heightS +
+                            " style=\"border: 1px solid #cccccc;\" " +
+                            "src=\"https://app.ubidots.com/ubi/getchart/9HonmohlhGD6IFhNya4DFATb3As\"></iframe>";
+                    WebView webview = (WebView) m.findViewById(R.id.webV);
+                    webview.getSettings().setJavaScriptEnabled(true);
+                    webview.loadData(html, "text/html", null);
+                    m.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            m.dismiss();
+                        }
+                    });
+
+                    m.show();
+                }
+                else if(v.getId() == R.id.toggle_button){
+                    text = "servo on/off";
+                    urlString = String.format(urlString, apiToken, chatId, text);
+                    client = new AsyncHttpClient();
+                    params = new RequestParams();
+                    params.put("key", "value");
+                    params.put("more", "data");
+                    client.get(urlString, params, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                        }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                        }
+                    });
+                }
                 return;
             case 1:
-                urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
-                apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
-                chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
-                text = "temperatura";
-                urlString = String.format(urlString, apiToken, chatId, text);
-                client = new AsyncHttpClient();
-                params = new RequestParams();
-                params.put("key", "value");
-                params.put("more", "data");
-                client.get(urlString, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if(v.getId() == R.id.btn0) {
+                    final Dialog m = new Dialog(ControlHouseActivity.this);
+                    m.setContentView(R.layout.graphic_dialog);
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    int heightPix = metrics.heightPixels;
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
 
-                    }
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    int width = (size.x / (int) metrics.density) * 5 / 10;
+                    int height = (size.y / (int) metrics.density) * 5 / 10;
+                    String widthS = String.valueOf(width);
+                    String heightS = String.valueOf(height);
 
-                    }
-                });
+                    String html = "<iframe width=" + widthS + " height=" + heightS +
+                            " style=\"border: 1px solid #cccccc;\" " +
+                            "src=\"https://app.ubidots.com/ubi/getchart/s9kcuoZcof_al7tpvsAiiPCfB4Q\"></iframe>";
+                    WebView webview = (WebView) m.findViewById(R.id.webV);
+                    webview.getSettings().setJavaScriptEnabled(true);
+                    webview.loadData(html, "text/html", null);
+                    m.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            m.dismiss();
+                        }
+                    });
+
+                    m.show();
+                }
+                else if(v.getId() == R.id.toggle_button){
+                    text = "termomentro on/off";
+                    urlString = String.format(urlString, apiToken, chatId, text);
+                    client = new AsyncHttpClient();
+                    params = new RequestParams();
+                    params.put("key", "value");
+                    params.put("more", "data");
+                    client.get(urlString, params, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                        }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                        }
+                    });
+                }
                 return;
             case 2:
-                //                String urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
-//                String apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
-//                String chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
-//                String text = "noise";
-//                urlString = String.format(urlString, apiToken, chatId, text);
-//                AsyncHttpClient client = new AsyncHttpClient();
-//                RequestParams params = new RequestParams();
-//                params.put("key", "value");
-//                params.put("more", "data");
-//                client.get(urlString, params, new AsyncHttpResponseHandler() {
-//                    @Override
-//                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//
-//                    }
-//                    @Override
-//                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//
-//                    }
-//                });
+                if(v.getId() == R.id.btn0) {
+                    final Dialog m = new Dialog(ControlHouseActivity.this);
+                    m.setContentView(R.layout.graphic_dialog);
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    int heightPix = metrics.heightPixels;
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
 
-                final Dialog m = new Dialog(ControlHouseActivity.this);
-                m.setContentView(R.layout.graphic_dialog);
+                    int width = (size.x / (int) metrics.density) * 5 / 10;
+                    int height = (size.y / (int) metrics.density) * 5 / 10;
+                    String widthS = String.valueOf(width);
+                    String heightS = String.valueOf(height);
 
-                DisplayMetrics metrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                int heightPix = metrics.heightPixels;
-                Display display = getWindowManager().getDefaultDisplay();
-                Point size = new Point();
-                display.getSize(size);
+                    String html = "<iframe width=" + widthS + " height=" + heightS +
+                            " style=\"border: 1px solid #cccccc;\" " +
+                            "src=\"https://app.ubidots.com/ubi/getchart/9HonmohlhGD6IFhNya4DFATb3As\"></iframe>";
+                    WebView webview = (WebView) m.findViewById(R.id.webV);
+                    webview.getSettings().setJavaScriptEnabled(true);
+                    webview.loadData(html, "text/html", null);
+                    m.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            m.dismiss();
+                        }
+                    });
 
-                int width = (size.x / (int) metrics.density)*5/10;
-                int height = (size.y / (int) metrics.density)*5/10;
-                String widthS = String.valueOf(width);
-                String heightS = String.valueOf(height);
+                    m.show();
+                }
+                else if(v.getId() == R.id.toggle_button){
+                    text = "noise on/off";
+                    urlString = String.format(urlString, apiToken, chatId, text);
+                    client = new AsyncHttpClient();
+                    params = new RequestParams();
+                    params.put("key", "value");
+                    params.put("more", "data");
+                    client.get(urlString, params, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
-                String html = "<iframe width="+widthS+" height="+heightS+" style=\"border: 1px solid #cccccc;\" src=\"https://app.ubidots.com/ubi/getchart/sWbrGVl1vNM_9EG25In2kJbIgMk\"></iframe>";
-                WebView webview = (WebView) m.findViewById(R.id.webV);
-                webview.getSettings().setJavaScriptEnabled(true);
-                webview.loadData(html, "text/html", null);
-                m.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        m.dismiss();
-                    }
-                });
+                        }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-                m.show();
+                        }
+                    });
+                }
                 return;
             case 3:
-                urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
-                apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
-                chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
-                text = "light";
-                urlString = String.format(urlString, apiToken, chatId, text);
-                client = new AsyncHttpClient();
-                params = new RequestParams();
-                params.put("key", "value");
-                params.put("more", "data");
-                client.get(urlString, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if(v.getId() == R.id.btn0) {
+                    final Dialog m = new Dialog(ControlHouseActivity.this);
+                    m.setContentView(R.layout.graphic_dialog);
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    int heightPix = metrics.heightPixels;
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
 
-                    }
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    int width = (size.x / (int) metrics.density) * 5 / 10;
+                    int height = (size.y / (int) metrics.density) * 5 / 10;
+                    String widthS = String.valueOf(width);
+                    String heightS = String.valueOf(height);
 
-                    }
-                });
+                    String html = "<iframe width=" + widthS + " height=" + heightS +
+                            " style=\"border: 1px solid #cccccc;\" " +
+                            "src=\"https://app.ubidots.com/ubi/getchart/s9kcuoZcof_al7tpvsAiiPCfB4Q\"></iframe>";
+                    WebView webview = (WebView) m.findViewById(R.id.webV);
+                    webview.getSettings().setJavaScriptEnabled(true);
+                    webview.loadData(html, "text/html", null);
+                    m.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            m.dismiss();
+                        }
+                    });
+
+                    m.show();
+                }
+                else if(v.getId() == R.id.toggle_button){
+                    text = "light on/off";
+                    urlString = String.format(urlString, apiToken, chatId, text);
+                    client = new AsyncHttpClient();
+                    params = new RequestParams();
+                    params.put("key", "value");
+                    params.put("more", "data");
+                    client.get(urlString, params, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                        }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                        }
+                    });
+                }
                 return;
             case 4:
-                urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
-                apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
-                chatId = "-1001476670474";//"@my_channel_name";  // id private = -1001476670474 del canale domestico
-                text = "sisma";
-                urlString = String.format(urlString, apiToken, chatId, text);
-                client = new AsyncHttpClient();
-                params = new RequestParams();
-                params.put("key", "value");
-                params.put("more", "data");
-                client.get(urlString, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if(v.getId() == R.id.btn0) {
+                    final Dialog m = new Dialog(ControlHouseActivity.this);
+                    m.setContentView(R.layout.graphic_dialog);
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    int heightPix = metrics.heightPixels;
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
 
-                    }
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    int width = (size.x / (int) metrics.density) * 5 / 10;
+                    int height = (size.y / (int) metrics.density) * 5 / 10;
+                    String widthS = String.valueOf(width);
+                    String heightS = String.valueOf(height);
 
-                    }
-                });
+                    String html = "<iframe width=" + widthS + " height=" + heightS +
+                            " style=\"border: 1px solid #cccccc;\" " +
+                            "src=\"https://app.ubidots.com/ubi/getchart/RvDLt4qvgmQ3dsMI6AE0JZbZ-uQ\"></iframe>";
+                    WebView webview = (WebView) m.findViewById(R.id.webV);
+                    webview.getSettings().setJavaScriptEnabled(true);
+                    webview.loadData(html, "text/html", null);
+                    m.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            m.dismiss();
+                        }
+                    });
+
+                    m.show();
+                }
+                else if(v.getId() == R.id.toggle_button){
+                    text = "sisma on/off";
+                    urlString = String.format(urlString, apiToken, chatId, text);
+                    client = new AsyncHttpClient();
+                    params = new RequestParams();
+                    params.put("key", "value");
+                    params.put("more", "data");
+                    client.get(urlString, params, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                        }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                        }
+                    });
+                }
                 return;
         }
     }
@@ -306,6 +423,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
     public void addItemList(int i){
         sensorsL.add(i);
         recyclerView.setAdapter(adapter);
+
     }
 
 

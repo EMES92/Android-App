@@ -19,16 +19,20 @@
         <FrameLayout
             android:id="@+id/frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/floatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="true"
                 android:layout_gravity="bottom|end"
                 android:layout_margin="20dp"
-                app:srcCompat="@drawable/com_facebook_close" />
+                android:clickable="true"
+                android:src="@drawable/plus"
+                app:backgroundTint="@color/cardview_light_background"
+                app:fabSize="normal"
+                app:rippleColor="@color/com_facebook_blue" />
         </FrameLayout>
 
     </LinearLayout>

@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment implements ItemClickListener{
     }
 
     public void addItemList(House newHouse){
-        newHouse.setIcon(R.drawable.ic_link);
+        newHouse.setIcon(R.mipmap.icona);
         addedHouse.add(newHouse);
         recyclerView.setAdapter(adapter);
     }

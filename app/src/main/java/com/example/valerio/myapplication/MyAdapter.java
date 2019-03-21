@@ -50,8 +50,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         Log.w("colore","theme my adapter "+theme);
 
         if (theme.equals(HomeFragment.DARKTHEME)) {
-            itemLayoutView.setBackgroundColor(0xFF000F00 );
-            itemLayoutView.findViewById(R.id.itemEntry).setBackgroundColor(0xFF00FF00);
+
+            itemLayoutView.findViewById(R.id.itemEntry).setBackgroundColor(0xFF757575);
         }
         return vh;
     }

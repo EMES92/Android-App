@@ -1,6 +1,10 @@
 package com.example.valerio.myapplication;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +17,13 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -23,6 +34,7 @@ public class MySensorsAdapter extends RecyclerView.Adapter<MySensorsAdapter.MyVi
     private String[] sensorName = new String[]{"sensorServo", "sensorTemp", "sensorNoise", "sensorLight", "sensorSisma"};
     private ItemClickListener clickListener;
     private Context context;
+    BitmapDrawable a;
 
 
     // constructor
@@ -44,7 +56,7 @@ public class MySensorsAdapter extends RecyclerView.Adapter<MySensorsAdapter.MyVi
         String theme = context.getSharedPreferences(MainActivity.getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(HomeFragment.THEME_SAVED, HomeFragment.LIGHTTHEME);
         if (theme.equals(HomeFragment.DARKTHEME)) {
             itemLayoutView.setBackgroundColor(0xFF000F00);
-            itemLayoutView.findViewById(R.id.itemSensorEntry).setBackgroundColor(0xFF00FFF0);
+            itemLayoutView.findViewById(R.id.itemSensorEntry).setBackgroundColor(0xFF757575);
         }
         return vh;
     }
@@ -73,12 +85,13 @@ public class MySensorsAdapter extends RecyclerView.Adapter<MySensorsAdapter.MyVi
                 return;
         }
 
-        holder.sensorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0){
-            }
-
-        });
+//        holder.sensorButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View arg0){
+//                Log.w("button","arg0  "+arg0);
+//            }
+//
+//        });
     }
 
     @Override
@@ -94,6 +107,27 @@ public class MySensorsAdapter extends RecyclerView.Adapter<MySensorsAdapter.MyVi
         this.clickListener = itemClickListener;
     }
 
+    public void getBitmapFromURL(String imageUrl) {
+
+        Picasso.get().load(imageUrl).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                Log.w("bitmap","bitmap");
+                a = new BitmapDrawable(bitmap);
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        });
+        return;
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -102,8 +136,13 @@ public class MySensorsAdapter extends RecyclerView.Adapter<MySensorsAdapter.MyVi
         public ToggleButton toggleButton;
         public SeekBar seek1;
 
+        //Drawable dr = new BitmapDrawable(myImage);
+
         public MyViewHolder(View itemLayoutView) {
             super(itemLayoutView);
+            getBitmapFromURL("https://app.ubidots.com/ubi/getchart/sWbrGVl1vNM_9EG25In2kJbIgMk");
+
+            itemLayoutView.findViewById(R.id.itemSensorEntry).setBackgroundDrawable(a);
             sensorName = itemLayoutView.findViewById(R.id.sensor_name);
             sensorButton = itemLayoutView.findViewById(R.id.btn0);
 
@@ -111,11 +150,19 @@ public class MySensorsAdapter extends RecyclerView.Adapter<MySensorsAdapter.MyVi
             seek1 = itemLayoutView.findViewById(R.id.seekBar);
 
             itemLayoutView.setOnClickListener(this);
+
+            itemLayoutView.setOnClickListener(this);
+            sensorButton.setOnClickListener(this);
+            toggleButton.setOnClickListener(this);
+            seek1.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if (clickListener != null) clickListener.onClick(view, getAdapterPosition());
+            if (clickListener != null) {
+                Log.w("button","adapter  " +view.getId());
+                clickListener.onClick(view, getAdapterPosition());
+            }
         }
     }
 }

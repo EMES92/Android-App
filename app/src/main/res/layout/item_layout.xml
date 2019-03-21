@@ -17,15 +17,15 @@
         <!-- icon -->
         <ImageView
             android:id="@+id/item_icon"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="1dp"
             android:contentDescription="icon"
-            android:src="@drawable/ic_link"
+            android:src="@mipmap/icona"
             />
 
         <!-- title -->

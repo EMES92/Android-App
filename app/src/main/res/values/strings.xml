@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Home Security</string>
     <string name="ciao">ciao !</string>
     <string name="time">Time</string>
     <string name="meteo">Button</string>

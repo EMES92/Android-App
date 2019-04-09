@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +46,17 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInAccount acct;
     private static String accountMail;
 
+    public static final String THEME_PREFERENCES = "com.example.valerio.myapplication.themepref";
+    public static final String RECREATE_MAIN_ACTIVITY = "com.example.valerio.myapplication.recreatemainactivity";
+    public static final String RECREATE_CONTROL_ACTIVITY = "com.example.valerio.myapplication.recreatecontrolactivity";
+    public static final String THEME_SAVED = "com.example.valerio.myapplication.savedtheme";
+    public static final String DARKTHEME = "com.example.valerio.myapplication.darktheme";
+    public static final String LIGHTTHEME = "com.example.valerio.myapplication.lighttheme";
+    public static final String STATUSFLAG = "com.example.valerio.myapplication.statusflag";
+
+
+
+
     //static List<String> addedHouse = new ArrayList<>();
     static List<House> addedHouse1 = new ArrayList<>();
 
@@ -62,12 +72,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String theme = getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(HomeFragment.THEME_SAVED, HomeFragment.LIGHTTHEME);
-        Log.w("colore","theme mainactivity1 "+theme);
-        if (theme.equals(HomeFragment.LIGHTTHEME)) {
+
+        acct = GoogleSignIn.getLastSignedInAccount(this);
+        if(acct != null){
+            accountMail=acct.getEmail();
+        }
+        else{
+            requestEmail(AccessToken.getCurrentAccessToken());
+            Profile profile = Profile.getCurrentProfile();
+            accountMail = profile.getId().toString();
+        }
+
+        String theme = getSharedPreferences(getAccountMail()+THEME_PREFERENCES, MODE_PRIVATE).getString(THEME_SAVED, LIGHTTHEME);
+        if (theme.equals(LIGHTTHEME)) {
             setTheme(R.style.CustomStyle_LightTheme);
         } else {
-            Log.w("colore","entro else");
             setTheme(R.style.CustomStyle_DarkTheme);
         }
         super.onCreate(savedInstanceState);
@@ -77,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         //Default Fragment
         final HomeFragment homefragment = new HomeFragment();
@@ -271,7 +289,6 @@ public class MainActivity extends AppCompatActivity {
 //                                    if(menuItem.getItem() = addedHouse.get(i))
 //                                }
                                 if(!addedHouse1.isEmpty()){
-                                    Log.w("tag","cazzo");
                                     for(int i =0; i<addedHouse1.size(); i++){
                                         String name = addedHouse1.get(i).getName();
                                         char[] ascii = name.toCharArray();
@@ -293,7 +310,6 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
-                                Log.w("tag","return");
                              return false;
                         }
                     }
@@ -394,11 +410,10 @@ public class MainActivity extends AppCompatActivity {
         and get an ANR
 
          */
-        Log.w("colore","theme main activitu resume ");
 
-        if (getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getBoolean(HomeFragment.RECREATE_ACTIVITY, false)) {
-            SharedPreferences.Editor editor = getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).edit();
-            editor.putBoolean(HomeFragment.RECREATE_ACTIVITY, false);
+        if (getSharedPreferences(getAccountMail()+THEME_PREFERENCES, MODE_PRIVATE).getBoolean(RECREATE_MAIN_ACTIVITY, false)) {
+            SharedPreferences.Editor editor = getSharedPreferences(getAccountMail()+THEME_PREFERENCES, MODE_PRIVATE).edit();
+            editor.putBoolean(RECREATE_MAIN_ACTIVITY, false);
             editor.apply();
             recreate();
         }

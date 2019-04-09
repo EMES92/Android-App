@@ -38,7 +38,6 @@
         <TextView
             android:id="@+id/updated_field"
             android:textColor="#fff"
-            android:text="sasasa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -93,9 +92,9 @@
     </RelativeLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true">
+        >
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"

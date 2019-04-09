@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="5dp">
-
 
     <RelativeLayout
         android:id="@+id/itemEntry"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:padding="4dp"
         android:layout_margin="0dp"
-        android:background="@drawable/item_border">
+        android:background="@drawable/item_border"
+        android:padding="4dp">
 
         <!-- icon -->
         <ImageView
@@ -21,40 +21,145 @@
             android:layout_height="80dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginBottom="1dp"
             android:contentDescription="icon"
-            android:src="@mipmap/icona"
-            />
+            android:src="@mipmap/icona" />
 
-        <!-- title -->
+        <!-- title - address -->
         <TextView
             android:id="@+id/item_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/item_icon"
             android:layout_alignBaseline="@+id/item_icon"
-            android:textColor="@android:color/black"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@+id/item_icon"
+            android:textColor="@android:color/black"
             android:textSize="18dp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/item_address"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/item_icon"
             android:layout_below="@+id/item_title"
             android:layout_alignBaseline="@+id/item_icon"
-            android:textColor="@android:color/holo_blue_dark"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="2dp"
-            android:textSize="14dp" />
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@+id/item_icon"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+
+        <!-- stato sensori -->
+
+        <ImageView
+            android:id="@+id/flagTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="80dp"
+            app:srcCompat="@drawable/red_circle" />
+
+        <ImageView
+            android:id="@+id/flagNoise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="200dp"
+            android:layout_marginLeft="200dp"
+            android:layout_marginBottom="80dp"
+            app:srcCompat="@drawable/red_circle" />
+
+        <ImageView
+            android:id="@+id/flagLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="25dp"
+            app:srcCompat="@drawable/red_circle" />
+
+        <ImageView
+            android:id="@+id/flagSisma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="200dp"
+            android:layout_marginLeft="200dp"
+            android:layout_marginBottom="25dp"
+            app:srcCompat="@drawable/red_circle" />
+        <TextView
+            android:id="@+id/textTemp"
+            android:text="Sensore di Temperatura"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="80dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginBottom="95dp"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:id="@+id/textNoise"
+            android:text="Sensore di      Rumore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="260dp"
+            android:layout_marginLeft="260dp"
+            android:layout_marginBottom="95dp"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:id="@+id/textLight"
+            android:text="Sensore di Luminosità"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="80dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginBottom="30dp"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:id="@+id/textSisma"
+            android:text="Sensore di Vibrazione"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="260dp"
+            android:layout_marginLeft="260dp"
+            android:layout_marginBottom="30dp"
+            android:textColor="@color/black"
+             />
+
 
     </RelativeLayout>
 

@@ -12,10 +12,9 @@ public class MyPreferenceActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        String theme = getSharedPreferences(MainActivity.getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(HomeFragment.THEME_SAVED, HomeFragment.LIGHTTHEME);
-        Log.w("colore","theme preference activitu "+theme);
+        String theme = getSharedPreferences(MainActivity.getAccountMail()+MainActivity.THEME_PREFERENCES, MODE_PRIVATE).getString(MainActivity.THEME_SAVED, MainActivity.LIGHTTHEME);
 
-        if (theme.equals(HomeFragment.LIGHTTHEME)) {
+        if (theme.equals(MainActivity.LIGHTTHEME)) {
             setTheme(R.style.CustomStyle_LightTheme);
         } else {
             setTheme(R.style.CustomStyle_DarkTheme);

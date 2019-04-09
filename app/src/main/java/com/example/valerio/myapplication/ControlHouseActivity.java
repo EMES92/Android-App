@@ -1,6 +1,7 @@
 package com.example.valerio.myapplication;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
@@ -20,8 +21,8 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
-import com.facebook.login.LoginManager;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -52,7 +53,6 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
 
     private boolean[] sensors;
 
-
     Typeface weatherFont;
 
     TextView cityField;
@@ -63,10 +63,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
 
     private RecyclerView recyclerView;
     private MySensorsAdapter adapter;
-
     private ArrayList<Integer> sensorsL = new ArrayList<>();
-
-
     Handler handler;
 
     public ControlHouseActivity(){
@@ -77,10 +74,9 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        String theme = getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(HomeFragment.THEME_SAVED, HomeFragment.LIGHTTHEME);
-        Log.w("colore","theme controlhouse "+theme);
+        String theme = getSharedPreferences(getAccountMail()+MainActivity.THEME_PREFERENCES, MODE_PRIVATE).getString(MainActivity.THEME_SAVED, MainActivity.LIGHTTHEME);
 
-        if (theme.equals(HomeFragment.LIGHTTHEME)) {
+        if (theme.equals(MainActivity.LIGHTTHEME)) {
             setTheme(R.style.CustomStyle_LightTheme);
         } else {
             setTheme(R.style.CustomStyle_DarkTheme);
@@ -119,7 +115,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
         recyclerView.setLayoutManager(layoutManager);
 
         // adapter
-        adapter = new MySensorsAdapter(sensorsL, getApplicationContext());
+        adapter = new MySensorsAdapter(sensorsL, getApplicationContext(), name);
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(this);
 
@@ -133,9 +129,9 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
 
     }
 
+
     @Override
     public void onClick(View v, int position){
-        //boolean sensor = sensorsMap.get(position);
         int i = sensorsL.get(position);
         String urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
         String apiToken = "603981379:AAFux3TNvauoPfIN0a1BWAnQ60IRcWg3Oos"; //'"my_bot_api_token";EmesAndroid Bot
@@ -150,13 +146,12 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                     m.setContentView(R.layout.graphic_dialog);
                     DisplayMetrics metrics = new DisplayMetrics();
                     getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                    int heightPix = metrics.heightPixels;
                     Display display = getWindowManager().getDefaultDisplay();
                     Point size = new Point();
                     display.getSize(size);
 
                     int width = (size.x / (int) metrics.density) * 5 / 10;
-                    int height = (size.y / (int) metrics.density) * 5 / 10;
+                    int height = (size.y / (int) metrics.density) * 2 / 10;
                     String widthS = String.valueOf(width);
                     String heightS = String.valueOf(height);
 
@@ -175,32 +170,12 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
 
                     m.show();
                 }
-                else if(v.getId() == R.id.toggle_button){
-                    text = "servo on/off";
-                    urlString = String.format(urlString, apiToken, chatId, text);
-                    client = new AsyncHttpClient();
-                    params = new RequestParams();
-                    params.put("key", "value");
-                    params.put("more", "data");
-                    client.get(urlString, params, new AsyncHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                        }
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                        }
-                    });
-                }
-                return;
             case 1:
                 if(v.getId() == R.id.btn0) {
                     final Dialog m = new Dialog(ControlHouseActivity.this);
                     m.setContentView(R.layout.graphic_dialog);
                     DisplayMetrics metrics = new DisplayMetrics();
                     getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                    int heightPix = metrics.heightPixels;
                     Display display = getWindowManager().getDefaultDisplay();
                     Point size = new Point();
                     display.getSize(size);
@@ -226,7 +201,13 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                     m.show();
                 }
                 else if(v.getId() == R.id.toggle_button){
-                    text = "termomentro on/off";
+                    ToggleButton current = v.findViewById(v.getId());
+                    SharedPreferences statusPreferences = getSharedPreferences(getAccountMail()+name+MainActivity.STATUSFLAG, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor statusEditor = statusPreferences.edit();
+                    statusEditor.putBoolean("temperatura", current.isChecked());
+                    statusEditor.apply();
+
+                    text = "temperatura on/off";
                     urlString = String.format(urlString, apiToken, chatId, text);
                     client = new AsyncHttpClient();
                     params = new RequestParams();
@@ -250,7 +231,6 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                     m.setContentView(R.layout.graphic_dialog);
                     DisplayMetrics metrics = new DisplayMetrics();
                     getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                    int heightPix = metrics.heightPixels;
                     Display display = getWindowManager().getDefaultDisplay();
                     Point size = new Point();
                     display.getSize(size);
@@ -262,7 +242,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
 
                     String html = "<iframe width=" + widthS + " height=" + heightS +
                             " style=\"border: 1px solid #cccccc;\" " +
-                            "src=\"https://app.ubidots.com/ubi/getchart/9HonmohlhGD6IFhNya4DFATb3As\"></iframe>";
+                            "src=\"https://app.ubidots.com/ubi/getchart/page/jqgpFVN0gQwfr28Pyp2ZeDLb37Q\"></iframe>";
                     WebView webview = (WebView) m.findViewById(R.id.webV);
                     webview.getSettings().setJavaScriptEnabled(true);
                     webview.loadData(html, "text/html", null);
@@ -276,6 +256,11 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                     m.show();
                 }
                 else if(v.getId() == R.id.toggle_button){
+                    ToggleButton current = v.findViewById(v.getId());
+                    SharedPreferences statusPreferences = getSharedPreferences(getAccountMail()+name+MainActivity.STATUSFLAG, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor statusEditor = statusPreferences.edit();
+                    statusEditor.putBoolean("noise", current.isChecked());
+                    statusEditor.apply();
                     text = "noise on/off";
                     urlString = String.format(urlString, apiToken, chatId, text);
                     client = new AsyncHttpClient();
@@ -300,7 +285,6 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                     m.setContentView(R.layout.graphic_dialog);
                     DisplayMetrics metrics = new DisplayMetrics();
                     getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                    int heightPix = metrics.heightPixels;
                     Display display = getWindowManager().getDefaultDisplay();
                     Point size = new Point();
                     display.getSize(size);
@@ -312,7 +296,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
 
                     String html = "<iframe width=" + widthS + " height=" + heightS +
                             " style=\"border: 1px solid #cccccc;\" " +
-                            "src=\"https://app.ubidots.com/ubi/getchart/s9kcuoZcof_al7tpvsAiiPCfB4Q\"></iframe>";
+                            "src=\"https://app.ubidots.com/ubi/getchart/page/5KjO4tnZ1vviqhHCjrDI8Mql7pE\"></iframe>";
                     WebView webview = (WebView) m.findViewById(R.id.webV);
                     webview.getSettings().setJavaScriptEnabled(true);
                     webview.loadData(html, "text/html", null);
@@ -326,6 +310,11 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                     m.show();
                 }
                 else if(v.getId() == R.id.toggle_button){
+                    ToggleButton current = v.findViewById(v.getId());
+                    SharedPreferences statusPreferences = getSharedPreferences(getAccountMail()+name+MainActivity.STATUSFLAG, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor statusEditor = statusPreferences.edit();
+                    statusEditor.putBoolean("light", current.isChecked());
+                    statusEditor.apply();
                     text = "light on/off";
                     urlString = String.format(urlString, apiToken, chatId, text);
                     client = new AsyncHttpClient();
@@ -350,7 +339,6 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                     m.setContentView(R.layout.graphic_dialog);
                     DisplayMetrics metrics = new DisplayMetrics();
                     getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                    int heightPix = metrics.heightPixels;
                     Display display = getWindowManager().getDefaultDisplay();
                     Point size = new Point();
                     display.getSize(size);
@@ -362,7 +350,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
 
                     String html = "<iframe width=" + widthS + " height=" + heightS +
                             " style=\"border: 1px solid #cccccc;\" " +
-                            "src=\"https://app.ubidots.com/ubi/getchart/RvDLt4qvgmQ3dsMI6AE0JZbZ-uQ\"></iframe>";
+                            "src=\"https://app.ubidots.com/ubi/getchart/page/RvDLt4qvgmQ3dsMI6AE0JZbZ-uQ\"></iframe>";
                     WebView webview = (WebView) m.findViewById(R.id.webV);
                     webview.getSettings().setJavaScriptEnabled(true);
                     webview.loadData(html, "text/html", null);
@@ -376,6 +364,11 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                     m.show();
                 }
                 else if(v.getId() == R.id.toggle_button){
+                    ToggleButton current = v.findViewById(v.getId());
+                    SharedPreferences statusPreferences = getSharedPreferences(getAccountMail()+name+MainActivity.STATUSFLAG, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor statusEditor = statusPreferences.edit();
+                    statusEditor.putBoolean("sisma", current.isChecked());
+                    statusEditor.apply();
                     text = "sisma on/off";
                     urlString = String.format(urlString, apiToken, chatId, text);
                     client = new AsyncHttpClient();
@@ -396,34 +389,22 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
                 return;
         }
     }
+
+
     @Override
     public void onResume() {
         super.onResume();
-        /*
-        We need to do this, as this activity's onCreate won't be called when coming back from SettingsActivity,
-        thus our changes to dark/light mode won't take place, as the setContentView() is not called again.
-        So, inside our SettingsFragment, whenever the checkbox's value is changed, in our shared preferences,
-        we mark our recreate_activity key as true.
-
-        Note: the recreate_key's value is changed to false before calling recreate(), or we woudl have ended up in an infinite loop,
-        as onResume() will be called on recreation, which will again call recreate() and so on....
-        and get an ANR
-
-         */
-        if (getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).getBoolean(HomeFragment.RECREATE_ACTIVITY, false)) {
-            SharedPreferences.Editor editor = getSharedPreferences(getAccountMail()+HomeFragment.THEME_PREFERENCES, MODE_PRIVATE).edit();
-            editor.putBoolean(HomeFragment.RECREATE_ACTIVITY, false);
+        if (getSharedPreferences(getAccountMail()+MainActivity.THEME_PREFERENCES, MODE_PRIVATE).getBoolean(MainActivity.RECREATE_CONTROL_ACTIVITY, false)) {
+            SharedPreferences.Editor editor = getSharedPreferences(getAccountMail()+MainActivity.THEME_PREFERENCES, MODE_PRIVATE).edit();
+            editor.putBoolean(MainActivity.RECREATE_CONTROL_ACTIVITY, false);
             editor.apply();
             recreate();
         }
-
-
     }
 
     public void addItemList(int i){
         sensorsL.add(i);
         recyclerView.setAdapter(adapter);
-
     }
 
 
@@ -450,7 +431,6 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     //Meteo
     private void updateWeatherData(final String city){
@@ -504,6 +484,7 @@ public class ControlHouseActivity extends AppCompatActivity implements ItemClick
             Log.e("SimpleWeather", "One or more fields not found in the JSON data");
         }
     }
+
 
     private void setWeatherIcon(int actualId, long sunrise, long sunset){
         int id = actualId / 100;

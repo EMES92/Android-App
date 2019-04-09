@@ -27,8 +27,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 
-
-
 public class Login extends AppCompatActivity implements View.OnClickListener{
 
     private Toolbar toolbar;
@@ -37,7 +35,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private static final int RC_SIGN_IN = 9001;
 
     private int logOut;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +122,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("FAIL", "signInResult:failed code=" + e.getStatusCode());
             updateUI(null);
         }
     }

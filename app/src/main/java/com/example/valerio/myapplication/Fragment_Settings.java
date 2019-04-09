@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceFragment;
-import android.util.Log;
-
 
 public class Fragment_Settings extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener
 {
@@ -15,25 +13,22 @@ public class Fragment_Settings extends PreferenceFragment implements SharedPrefe
     {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
-        Log.w("colore","fragment settings unooo");
-
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.w("colore","fragment settings");
-
         if (key.equals("night_mode_pref_key")) {
-            SharedPreferences themePreferences = getActivity().getSharedPreferences(MainActivity.getAccountMail()+HomeFragment.THEME_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences themePreferences = getActivity().getSharedPreferences(MainActivity.getAccountMail()+MainActivity.THEME_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor themeEditor = themePreferences.edit();
             //We tell our MainLayout to recreate itself because mode has changed
-            themeEditor.putBoolean(HomeFragment.RECREATE_ACTIVITY, true);
+            themeEditor.putBoolean(MainActivity.RECREATE_MAIN_ACTIVITY, true);
+            themeEditor.putBoolean(MainActivity.RECREATE_CONTROL_ACTIVITY, true);
 
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference("night_mode_pref_key");
             if (checkBoxPreference.isChecked()) {
-                themeEditor.putString(HomeFragment.THEME_SAVED, HomeFragment.DARKTHEME);
+                themeEditor.putString(MainActivity.THEME_SAVED, MainActivity.DARKTHEME);
             } else {
-                themeEditor.putString(HomeFragment.THEME_SAVED, HomeFragment.LIGHTTHEME);
+                themeEditor.putString(MainActivity.THEME_SAVED, MainActivity.LIGHTTHEME);
             }
             themeEditor.apply();
 

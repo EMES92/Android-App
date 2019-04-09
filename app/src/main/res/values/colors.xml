@@ -16,7 +16,7 @@
     <!--minimal-->
 
     <color name="amber">#FFC107</color>
-    <color name="red_primary">#D32F2F</color>
+    <color name="red_primary">#d32f2f</color>
     <color name="red_secondary">#F44336</color>
     <color name="divider_color">#B6B6B6</color>
     <color name="light_primary_color">#FFCDD2</color>
@@ -27,6 +27,7 @@
     <color name="accent">#03A9F4</color>
     <!--<color name="accent">#FF9100</color>-->
     <color name="primary_text">#212121</color>
+    <color name="black">#000000</color>
     <color name="secondary_text">#727272</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>

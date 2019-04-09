@@ -1,7 +1,9 @@
 package com.example.valerio.myapplication;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -22,12 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements ItemClickListener{
-
-    public static final String THEME_PREFERENCES = "com.avjindersekhon.themepref";
-    public static final String RECREATE_ACTIVITY = "com.avjindersekhon.recreateactivity";
-    public static final String THEME_SAVED = "com.avjindersekhon.savedtheme";
-    public static final String DARKTHEME = "com.avjindersekon.darktheme";
-    public static final String LIGHTTHEME = "com.avjindersekon.lighttheme";
 
     private RecyclerView recyclerView;
     private StoreRetrieveData storeRetrieveData;
@@ -102,14 +98,14 @@ public class HomeFragment extends Fragment implements ItemClickListener{
         recyclerView.setAdapter(adapter);
     }
 
-    private void saveDate() {
-        try {
-            storeRetrieveData.saveToFile(addedHouse);
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    private void saveDate() {
+//        try {
+//            storeRetrieveData.saveToFile(addedHouse);
+//        } catch (JSONException | IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     @Override
     public void onPause() {
@@ -121,6 +117,11 @@ public class HomeFragment extends Fragment implements ItemClickListener{
         }
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        recyclerView.setAdapter(adapter);
+    }
 
     @Override
     public void onDestroy() {
@@ -161,72 +162,16 @@ public class HomeFragment extends Fragment implements ItemClickListener{
                 String name = adapter.getItem(position).getName();
                 char[] ascii = name.toCharArray();
                 int tot = 0;
-                for(char ch:ascii){
-                    tot = tot+((int)ch);
+                for (char ch : ascii) {
+                    tot = tot + ((int) ch);
                 }
                 adapter.removeItem(position);
 
                 MainActivity.getAddedHouse1().remove(position);
                 navigationView.getMenu().removeItem(tot);
-
-                // showing snack bar with Undo option
-//                    Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), " removed from Recyclerview!", Snackbar.LENGTH_LONG);
-//                    snackbar.setAction("UNDO", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            // undo is selected, restore the deleted item
-//                            MyAdapter.restoreItem(deletedModel, deletedPosition);
-//                        }
-//                    });
-//                    snackbar.setActionTextColor(Color.YELLOW);
-//                    snackbar.show();
-//                 else {
-//                    final Model deletedModel = imageModelArrayList.get(position);
-//                    final int deletedPosition = position;
-//                    adapter.removeItem(position);
-//                    // showing snack bar with Undo option
-//                    Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), " removed from Recyclerview!", Snackbar.LENGTH_LONG);
-//                    snackbar.setAction("UNDO", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//
-//                            // undo is selected, restore the deleted item
-//                            adapter.restoreItem(deletedModel, deletedPosition);
-//                        }
-//                    });
-//                    snackbar.setActionTextColor(Color.YELLOW);
-//                    snackbar.show();
-//                }
+                SharedPreferences settings = getContext().getSharedPreferences(MainActivity.getAccountMail()+name+MainActivity.STATUSFLAG, Context.MODE_PRIVATE);
+                settings.edit().clear().apply();
             }
-
-//            @Override
-//            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-//
-//                Bitmap icon;
-//                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
-//
-//                    View itemView = viewHolder.itemView;
-//                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
-//                    float width = height / 3;
-//
-//                    if(dX > 0){
-//                        p.setColor(Color.parseColor("#388E3C"));
-//                        RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX,(float) itemView.getBottom());
-//                        c.drawRect(background,p);
-//                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.delete);
-//                        RectF icon_dest = new RectF((float) itemView.getLeft() + width ,(float) itemView.getTop() + width,(float) itemView.getLeft()+ 2*width,(float)itemView.getBottom() - width);
-//                        c.drawBitmap(icon,null,icon_dest,p);
-//                    } else {
-//                        p.setColor(Color.parseColor("#D32F2F"));
-//                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
-//                        c.drawRect(background,p);
-//                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.delete);
-//                        RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
-//                        c.drawBitmap(icon,null,icon_dest,p);
-//                    }
-//                }
-//                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-//            }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
